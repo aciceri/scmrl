@@ -37,7 +37,8 @@
 		  (start_color)
 		  (init_pair 1 COLOR_RED COLOR_BLACK)
 		  (init_pair 2 COLOR_YELLOW COLOR_BLACK)
-		  (set! mapWin (newwin mapWinHeight mapWinWidth 0 0))
+		  (init_pair 3 COLOR_BLACK COLOR_WHITE)
+          (set! mapWin (newwin mapWinHeight mapWinWidth 0 0))
 		  (set! logWin (newwin logWinHeight logWinWidth mapWinHeight 0))
 		  (set! statWin (newwin statWinHeight statWinWidth 0 mapWinWidth))))))))
         
@@ -104,7 +105,11 @@
 
   (define (drawPlayer!)
     (let-values (((height width) (getmaxyx mapWin)))
-      (mvwaddch mapWin (quotient height 2) (quotient width 2) #\@)))
+      (wattron mapWin (COLOR_PAIR 3))
+      (mvwaddch mapWin (quotient height 2) (quotient width 2) #\@)
+      (wattroff mapWin (COLOR_PAIR 3)))
+    (wrefresh mapWin)
+    )
   
   (define (drawMap! dungeon fov x y dungeonWidth dungeonHeight)
     (wclear mapWin)
