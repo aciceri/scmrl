@@ -36,8 +36,12 @@
 		(begin
 		  (start_color)
 		  (init_pair 1 COLOR_RED COLOR_BLACK)
-		  (init_pair 2 COLOR_YELLOW COLOR_BLACK)
-		  (init_pair 3 COLOR_BLACK COLOR_WHITE)
+		  (init_pair 2 COLOR_YELLOW COLOR_WHITE)
+		  (init_pair 3 COLOR_BLUE COLOR_BLACK)
+          (init_pair 4 COLOR_YELLOW COLOR_BLACK)
+          (init_pair 5 COLOR_BLACK COLOR_WHITE)
+
+
           (set! mapWin (newwin mapWinHeight mapWinWidth 0 0))
 		  (set! logWin (newwin logWinHeight logWinWidth mapWinHeight 0))
 		  (set! statWin (newwin statWinHeight statWinWidth 0 mapWinWidth))))))))
@@ -120,13 +124,22 @@
 				    (yMap (+ y (- yScreen (quotient mapWinHeight 2)))))
 				(when (and (< xMap dungeonWidth) (< yMap dungeonHeight)
 					   (> xMap 0) (> yMap 0))
-				  (when (array-ref fov xMap yMap)
-				    (wattron mapWin A_BOLD)
-				    (wattron mapWin (COLOR_PAIR 2)))
+				  
+                  (when (eq? (array-ref dungeon xMap yMap) #\#)
+                    (wattron mapWin (COLOR_PAIR 5)))
+
+                  (when (array-ref fov xMap yMap) 
+				            (wattron mapWin A_BOLD)
+                        ;(when (eq? (array-ref dungeon xMap yMap) #\#)
+				        ;    (wattron mapWin (COLOR_PAIR 2)))
+                        (when (eq? (array-ref dungeon xMap yMap) #\.)
+                            (wattron mapWin (COLOR_PAIR 4))))
                   
 
                   (mvwaddch mapWin yScreen xScreen (array-ref dungeon xMap yMap))
 				  (wattroff mapWin A_BOLD)
+                  (wattroff mapWin (COLOR_PAIR 4))
+                  (wattroff mapWin (COLOR_PAIR 5))
 				  (wattroff mapWin (COLOR_PAIR 2)))))
 			    (iota (- mapWinWidth 1))))
 		(iota (- mapWinHeight 1))))
