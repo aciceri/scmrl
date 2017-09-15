@@ -9,7 +9,7 @@
      drawPath!)
 
   (import chicken scheme)
-  (use srfi-1 srfi-25 extras ncurses)
+  (use srfi-1 srfi-13 srfi-25 extras ncurses)
   
 
   (define log '())
@@ -94,16 +94,20 @@
       (let ((ch (wgetch win)))
 	(if (eq? (char->integer ch ) 10) ;10 is the ENTER KEY code
 	    str
-	    (if (<= (char->integer ch) 127)
+	    (if (or (>= (char->integer ch) 127) (< (char->integer ch) 32))
 		(loop str)
-		(loop (string-append str (string ch))))))))
+        (if (= (char->integer ch) 8)
+          (loop (string-take str (- (string-length str) 1)))
+		  (loop (string-append str (string ch)))))))))
 
   (define (askMsg msg)
     (let ((answer ""))
+      (echo)
       (curs_set 1)
       (pushMsg! msg)
       (set! answer (mvwgetstr logWin 0 (string-length msg)))
       (curs_set 0)
+      (noecho)
       (set-car! log `(,(string-append msg answer) 1))
       answer))
 

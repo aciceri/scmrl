@@ -9,7 +9,7 @@
   
   (define WALL-CHAR #\#)
   (define FLOOR-CHAR #\.)
-
+  
   
   (define (createDungeon width height nRooms nCuts prob)
     (let ((grid (make-array (shape 0 width 0 height) WALL-CHAR)) (rooms '()))
@@ -40,6 +40,7 @@
 	  (list x y)
 	  (getWallRandomCoord m width height))))
 
+  
   (define (getFloorRandomCoord m width height)
     (let ((x (randomBetween 3 (- width 3))) (y (randomBetween 3 (- height 3))))
       (if (eq? (array-ref m x y) #\.)

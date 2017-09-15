@@ -45,12 +45,12 @@
 				  (array-set! explored x y (array-ref d x y))))
 			      (iota h)))
 		  (iota w))
-	(drawMap! d fov xPlayer yPlayer w h))
+	(drawMap! explored fov xPlayer yPlayer w h))
 
       
       (drawPlayer!)
 
-      (set! dm (createDijkstraMap d w h xPlayer yPlayer))
+      ;(set! dm (createDijkstraMap d w h xPlayer yPlayer))
       ;(let ((path (calculatePath dm w h xEnd yEnd)))
 	;(drawPath! d path xPlayer yPlayer))
       
@@ -63,14 +63,16 @@
 	       (when (eq? (array-ref d (- xPlayer 1) yPlayer) #\.) (set! xPlayer (- xPlayer 1))))
 	      ((eq? key #\s)
 	       (when (eq? (array-ref d xPlayer (+ yPlayer 1)) #\.) (set! yPlayer (+ yPlayer 1))))
-	      ((eq? key #\d)
+          ((eq? key #\d)
 	       (when (eq? (array-ref d (+ xPlayer 1) yPlayer) #\.) (set! xPlayer (+ xPlayer 1))))
-	      ((eq? key #\q) (set! running #f))))
+	      ((eq? key #\q)
+           (when (equal? (askMsg "Type 'quit' to quit: ") "quit")
+             (set! running #f)))))
       (loop running)))
 	     
 
   
-  (destroyScreen! "OK")
+  (destroyScreen! "Thanks for playing")
  
 
 
