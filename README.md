@@ -34,7 +34,7 @@ It implements a precise shadowcasting to calculate the field of vision.
 ### Scheduler.scm
 It implements a scheduler which is able to manage different events with different lengths
 
-### Terminal
+### Terminal.scm
 It provides the interface (input and output) with the terminal, it uses intensively the nCurses library.
 
 
