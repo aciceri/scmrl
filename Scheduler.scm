@@ -2,22 +2,22 @@
 
 
 (define-class <Scheduler> ()
-  ((ticks initform: 0)
+  ((ticks initform: 0)  ;ticks start from 0 by default
    (events '())))
 
 (define-class <Event> ()
-  (name ticksDelay startTick))
+  (name func ticksDelay startTick))  ;name is only for debug purpose
 
 (define-class <Actor> ()
   (name))
 
 
-(define-method (progress (scheduler <Scheduler>))
+(define-method (progress (scheduler <Scheduler>))  ;progress the ticks i.e. go in the future
   (set! (slot-value scheduler 'ticks) (+ (slot-value scheduler 'ticks) 1))
-  (let ((newEvents '()))
+  (let ((newEvents '()))  ;because some events may be deleted (if they're past)
     (for-each (lambda (event)
                (if (= (slot-value event 'startTick) (slot-value scheduler 'ticks))
-                 (display (slot-value event 'name))
+                 ((slot-value event 'func))  ;evalutate 'func if it's the time
                  (set! newEvents (cons event newEvents))) 
              ) (slot-value scheduler 'events))))
 
@@ -32,10 +32,12 @@
 (define s (make <Scheduler>))
 (define e1 (make <Event>
                  'name "Event 1"
+                 'func (lambda () (format #t "ciao 1\n"))
                  'ticksDelay 2))
 
 (define e2 (make <Event>
                  'name "Event 2"
+                 'func (lambda () (format #t "ciao 2\n"))
                  'ticksDelay 5))
 
 (addEvent s e1)
