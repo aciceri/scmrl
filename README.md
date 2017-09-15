@@ -4,7 +4,7 @@ This is my personal attempt to realize a roguelike with Chicken Scheme.
 The game is not playable yet.
 
 
-##Dependencies
+## Dependencies
 
 * Chicken Scheme (at the moment it works only with the interpreter, but it will be compilable)
 * Some SRFIs that are included in Chicken Scheme
@@ -14,11 +14,11 @@ The game is not playable yet.
 * The egg *ncurses* to interface with the terminal
 * The egg *coops* to have an object oriented system
 
-##Files
-###Dijkstra.scm
+## Files
+### Dijkstra.scm
 It contains the algorithms to create the Dijkstra maps and estabilish the shortest path.
 
-###Dungeon.scm
+### Dungeon.scm
 It provides the dungeon generation, this is the algorithm general explanation:
 
 1. Generate a grid with every cell set to wall
@@ -28,17 +28,17 @@ It provides the dungeon generation, this is the algorithm general explanation:
 5. Bury the corridor's dead ends for a prefixed number of cell
 5. Lighten the dungeon randomly burying some cells in order to create new passages
 
-###Fov.scm
+### Fov.scm
 It implements a precise shadowcasting to calculate the field of vision.
 
-###Scheduler.scm
+### Scheduler.scm
 It implements a scheduler which is able to manage different events with different lengths
 
-###Terminal
+### Terminal
 It provides the interface (input and output) with the terminal, it uses intensively the nCurses library.
 
 
-##Important
+## Important
 There might be some graphical glitches, to avoid them it's necessary to set the environment variable *TERM* to *vte*.
 
 `export TERM=vte`
