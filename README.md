@@ -6,7 +6,7 @@ The game is not playable yet.
 
 ## Dependencies
 
-* Chicken Scheme (at the moment it works only with the interpreter, but it will be compilable)
+* Chicken Scheme (~~at the moment it works only with the interpreter, but it will be compilable~~)
 * Some SRFIs that are included in Chicken Scheme
 * *SRFI 25* (installable like an egg)
 * The egg *random-bsd* for the pseudorandom numbers generation
