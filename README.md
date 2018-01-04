@@ -17,6 +17,7 @@ The game is not playable yet.
 ## Files
 ### Dijkstra.scm
 It contains the algorithms to create the Dijkstra maps and estabilish the shortest path.
+(Not implemented yet)
 
 ### Dungeon.scm
 It provides the dungeon generation, this is the algorithm general explanation:
@@ -36,6 +37,14 @@ It implements a scheduler which is able to manage different events with differen
 
 ### Terminal.scm
 It provides the interface (input and output) with the terminal, it uses intensively the nCurses library.
+
+
+## Installation
+You can compile the game moving in the main directory and entering this command:
+
+`chicken-install`
+
+Then you can play entering `./scmrl`
 
 
 ## Important

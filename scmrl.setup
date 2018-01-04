@@ -1,0 +1,5 @@
+(compile -s -j Dijkstra Dijkstra.scm )
+(compile -s -j Dungeon Dungeon.scm )
+(compile -s -j Fov Fov.scm )
+(compile -s -j Terminal Terminal.scm )
+(compile scmrl.scm)

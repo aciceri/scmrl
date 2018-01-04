@@ -1,0 +1,10 @@
+((author "Andrea Ciceri")
+ (synopsis "A simple roguelike written in Scheme")
+ (license "GNU GENERAL PUBLIC LICENSE 3")
+ (files "scmrl.setup"
+        "Dijkstra.scm"
+        "Dungeon.scm"
+        "Fov.scm"
+        "Terminal.scm"
+        "Test.scm"
+))

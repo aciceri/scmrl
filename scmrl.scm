@@ -1,7 +1,3 @@
-(require "Terminal.scm")
-(require "Dungeon.scm")
-(require "Fov.scm")
-(require "Dijkstra.scm")
 (use Terminal)
 (use Dungeon)
 (use Fov)
