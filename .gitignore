@@ -5,3 +5,8 @@
 *.scm~
 *.scm#*
 .#*.scm
+
+*.so
+*.import.scm
+
+scmrl
