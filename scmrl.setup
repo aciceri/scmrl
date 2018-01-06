@@ -2,4 +2,5 @@
 (compile -s -j Dungeon Dungeon.scm )
 (compile -s -j Fov Fov.scm )
 (compile -s -j Terminal Terminal.scm )
+(compile -s -j Scheduler Scheduler.scm )
 (compile scmrl.scm)
