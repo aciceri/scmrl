@@ -3,6 +3,9 @@
 This is my personal attempt to realize a roguelike with Chicken Scheme.
 The game is not playable yet.
 
+![Image](https://i.imgur.com/8hfUrQK.gif)
+
+
 
 ## Dependencies
 
