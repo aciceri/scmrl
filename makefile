@@ -3,3 +3,6 @@ build:
 
 install:
 	chicken-install #you must be be root!
+
+clean:
+	rm -f *.sh *.so *.o *.link *.import.scm

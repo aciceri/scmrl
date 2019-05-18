@@ -1,9 +1,8 @@
 ((author "Andrea Ciceri")
  (synopsis "An embryonal stage roguelike written in Scheme")
  (license "GNU General Public License v3.0")
+ (dependencies coops)
  (components (program scmrl (source "scmrl.scm")
-                                ;(component-dependencies lib))\
-                                )
-             ;(extension lib (link-options -L -lncurses)
-             ;               (source "lib.scm"))))
-             ))
+                                (component-dependencies terminal))
+             (extension terminal (link-options -L -lncurses)
+                            (source "terminal.scm"))))
