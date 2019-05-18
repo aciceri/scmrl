@@ -2,7 +2,7 @@
     (createDijkstraMap
      calculatePath)
 
-  (import chicken scheme)
+  
   (use srfi-1)
   (use srfi-25)
   (use extras)
