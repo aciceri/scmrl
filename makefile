@@ -1,4 +1,5 @@
 build:
+	rm -f scmrl
 	chicken-install -n #not installing, only building
 
 install:
