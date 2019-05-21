@@ -5,7 +5,8 @@
 
 
 (module terminal
-        (make-terminal
+        (<terminal>
+         make-terminal
          destroy-terminal
          get-key
          push-msg
@@ -19,7 +20,8 @@
                 srfi-25 ;for arrays
                 coops
                 coops-primitive-objects ;for passing standard chicken types as method arguments
-                dungeon)
+                dungeon
+                player)
 
         ;;;Low level access to ncurses API directly using C
         (define-foreign-type WINDOW "WINDOW")
@@ -63,7 +65,7 @@
                                             "char* str = malloc(sizeof(char) * n);
                                              mvwgetnstr(win, y, x, str, n);
                                              C_return(str);"))
-        (define wgetch (foreign-lambda int "wgetch" (c-pointer WINDOW)))
+        (define wgetch (foreign-lambda char "wgetch" (c-pointer WINDOW)))
         (define mvwaddch (foreign-lambda int "mvwaddch" (c-pointer WINDOW) int int char))
 
 
@@ -159,18 +161,20 @@
             (set-car! (log-msgs t) `(,(string-append msg answer) 1))
             answer))
 
-        (define-method (draw-map (x <integer>) (y <integer>) (t <terminal>) (d <dungeon>))
+        (define-method (draw-map (t <terminal>) (d <dungeon>) (p <player>))
           (wclear (map-win t))
           (let ((map-win-width (getmaxwidth (map-win t)))
                 (map-win-height (getmaxheight (map-win t))))
             (for-each (lambda (y-screen)
                         (for-each (lambda (x-screen)
-                                    (let ((x-map (+ x (- x-screen (quotient map-win-width 2))))
-                                          (y-map (+ y (- y-screen (quotient map-win-height 2)))))
+                                    (let ((x-map (+ (get-x p) (- x-screen (quotient map-win-width 2))))
+                                          (y-map (+ (get-y p) (- y-screen (quotient map-win-height 2)))))
                                       (if (and (< x-map (get-width d)) (< y-map (get-height d))
                                                (> x-map 0) (> y-map 0))
                                           (begin
-                                        
+                                            (if (and (= (get-x p) x-map) (= (get-y p) y-map))
+                                                (mvwaddch (map-win t) y-screen x-screen #\@)
+                                            
                                         ;(when (eq? (array-ref dungeon xMap yMap) #\#)
                                         ;  (wattron mapWin (COLOR_PAIR 5)))
                                         
@@ -182,7 +186,7 @@
                                         ;    (wattron mapWin (COLOR_PAIR 4))))
                                         
                                         
-                                            (mvwaddch (map-win t) y-screen x-screen (array-ref (get-grid d) x-map y-map))
+                                            (mvwaddch (map-win t) y-screen x-screen (array-ref (get-grid d) x-map y-map)))
                                         ;(wattroff mapWin A_BOLD)
                                         ;(wattroff mapWin (COLOR_PAIR 4))
                                         ;(wattroff mapWin (COLOR_PAIR 5))
