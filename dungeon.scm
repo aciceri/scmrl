@@ -3,25 +3,17 @@
          make-dungeon
          get-width
          get-height
-         get-grid)
+         get-grid
+         fov)
 
         (import scheme
                 srfi-1
                 srfi-25 ;for arrays
-                (chicken random)
                 coops
-                coops-primitive-objects)
+                coops-primitive-objects
+                utils
+                fov)
 
-        ;;;this isn't the definitive place for this functions
-        (define (random-between a b)
-          (+ (pseudo-random-integer (abs (- (+ b 1) a))) a)) ;random integer in [a, b]
-
-        (define (map-matrix x1 y1 x2 y2 f) ;apply f for every (x, y) in the rectangle (x1, x2, y1, y2)
-          (for-each (lambda (y)
-                      (for-each (lambda (x)
-                                  (f x y))
-                                (iota (abs (- x1 x2)) (min x1 x2) 1)))
-                    (iota (abs (- y1 y2)) (min y1 y2) 1)))
 
         (define WALL-CHAR #\#)
         (define FLOOR-CHAR #\.)
@@ -236,5 +228,8 @@
                                        (eq? (array-ref m x y) WALL-CHAR)
                                        (eq? (array-ref m x (- y 1)) FLOOR-CHAR))
                               (array-set! m x y FLOOR-CHAR)))))))
+
+        (define-method (fov (d <dungeon>) (x <integer>) (y <integer>) (radius <integer>))
+          (calculate-fov (get-grid d) (get-width d) (get-height d) x y radius))
 
         )

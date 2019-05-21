@@ -55,6 +55,7 @@
         (define COLOR_MAGENTA (foreign-value "COLOR_MAGENTA" int))
         (define COLOR_CYAN (foreign-value "COLOR_CYAN" int))
         (define COLOR_WHITE (foreign-value "COLOR_WHITE" int))
+        (define A_BOLD (foreign-value "A_BOLD" int))
         (define wattron (foreign-lambda int "wattron" (c-pointer WINDOW) int))
         (define wattroff (foreign-lambda int "wattroff" (c-pointer WINDOW) int))
         (define wclear (foreign-lambda int "wclear" (c-pointer WINDOW)))
@@ -98,7 +99,7 @@
                       (curs_set 0)
                       (noecho)
                       (start_color)
-                      (init_pair 1 COLOR_GREEN COLOR_MAGENTA) ;colors palette definition 
+                      (init_pair 1 COLOR_YELLOW COLOR_BLACK) ;colors palette definition 
                       (init_pair 2 COLOR_MAGENTA COLOR_GREEN)
 
                       (set! (map-win t)
@@ -174,24 +175,23 @@
                                           (begin
                                             (if (and (= (get-x p) x-map) (= (get-y p) y-map))
                                                 (mvwaddch (map-win t) y-screen x-screen #\@)
-                                            
+                                                (begin
+                                                  
+                                                  (if (array-ref (get-fov p) x-map y-map) (wattron (map-win t) (COLOR_PAIR 1)))
+                                                  (mvwaddch (map-win t) y-screen x-screen (array-ref (get-grid d) x-map y-map))
+                                                (wattroff (map-win t) (COLOR_PAIR 1))
+                                                  ))))))
                                         ;(when (eq? (array-ref dungeon xMap yMap) #\#)
                                         ;  (wattron mapWin (COLOR_PAIR 5)))
                                         
-                                        ;(when (array-ref fov xMap yMap) 
-                                        ;  (wattron mapWin A_BOLD)
                                         ;(when (eq? (array-ref dungeon xMap yMap) #\#)
                                         ;    (wattron mapWin (COLOR_PAIR 2)))
                                         ;  (when (eq? (array-ref dungeon xMap yMap) #\.)
                                         ;    (wattron mapWin (COLOR_PAIR 4))))
                                         
                                         
-                                            (mvwaddch (map-win t) y-screen x-screen (array-ref (get-grid d) x-map y-map)))
-                                        ;(wattroff mapWin A_BOLD)
-                                        ;(wattroff mapWin (COLOR_PAIR 4))
                                         ;(wattroff mapWin (COLOR_PAIR 5))
                                         ;(wattroff mapWin (COLOR_PAIR 2)))))
-                                            ))))
                                   (iota (- map-win-width 1))))
                       (iota (- map-win-height 1))))
           (wrefresh (map-win t)))

@@ -25,7 +25,7 @@
 
         (define-method (loop (term <terminal>) (player <player>) (dungeon <dungeon>))
           (let repeat ((key (get-key term)))
-            (push-msg term (format #f "~a" key))
+            (push-msg term (format #f "You pressed \"~a\"" key))
 
             (cond
              ((eq? key #\w) (move player 'n))
@@ -33,8 +33,10 @@
              ((eq? key #\s) (move player 's))
              ((eq? key #\d) (move player 'e)))
 
+            (update-fov player dungeon)
 
             (draw-map term dungeon player)
+
             (if (not (eq? key #\q))
                 (repeat (get-key term))
                 (destroy-terminal term "Correctly terminated")
