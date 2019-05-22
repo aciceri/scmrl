@@ -20,6 +20,7 @@
                 srfi-25 ;for arrays
                 coops
                 coops-primitive-objects ;for passing standard chicken types as method arguments
+                utils
                 dungeon
                 player)
 
@@ -99,8 +100,9 @@
                       (curs_set 0)
                       (noecho)
                       (start_color)
-                      (init_pair 1 COLOR_YELLOW COLOR_BLACK) ;colors palette definition 
-                      (init_pair 2 COLOR_MAGENTA COLOR_GREEN)
+                      (init_pair 1 COLOR_BLACK COLOR_WHITE)
+                      (init_pair 2 COLOR_YELLOW COLOR_BLACK) ;colors palette definition 
+                      (init_pair 3 COLOR_WHITE COLOR_BLACK)
 
                       (set! (map-win t)
                             (newwin map-win-height map-win-width 0 0))
@@ -166,34 +168,41 @@
           (wclear (map-win t))
           (let ((map-win-width (getmaxwidth (map-win t)))
                 (map-win-height (getmaxheight (map-win t))))
-            (for-each (lambda (y-screen)
-                        (for-each (lambda (x-screen)
-                                    (let ((x-map (+ (get-x p) (- x-screen (quotient map-win-width 2))))
-                                          (y-map (+ (get-y p) (- y-screen (quotient map-win-height 2)))))
-                                      (if (and (< x-map (get-width d)) (< y-map (get-height d))
-                                               (> x-map 0) (> y-map 0))
-                                          (begin
-                                            (if (and (= (get-x p) x-map) (= (get-y p) y-map))
-                                                (mvwaddch (map-win t) y-screen x-screen #\@)
-                                                (begin
-                                                  
-                                                  (if (array-ref (get-fov p) x-map y-map) (wattron (map-win t) (COLOR_PAIR 1)))
-                                                  (mvwaddch (map-win t) y-screen x-screen (array-ref (get-grid d) x-map y-map))
-                                                (wattroff (map-win t) (COLOR_PAIR 1))
-                                                  ))))))
-                                        ;(when (eq? (array-ref dungeon xMap yMap) #\#)
-                                        ;  (wattron mapWin (COLOR_PAIR 5)))
-                                        
-                                        ;(when (eq? (array-ref dungeon xMap yMap) #\#)
-                                        ;    (wattron mapWin (COLOR_PAIR 2)))
-                                        ;  (when (eq? (array-ref dungeon xMap yMap) #\.)
-                                        ;    (wattron mapWin (COLOR_PAIR 4))))
-                                        
-                                        
-                                        ;(wattroff mapWin (COLOR_PAIR 5))
-                                        ;(wattroff mapWin (COLOR_PAIR 2)))))
-                                  (iota (- map-win-width 1))))
-                      (iota (- map-win-height 1))))
+            (map-matrix 0 0 (- map-win-width 1) (- map-win-height 1)
+                        (lambda (x-screen y-screen)
+
+                          (let ((x-map (+ (get-x p) (- x-screen (quotient map-win-width 2))))
+                                (y-map (+ (get-y p) (- y-screen (quotient map-win-height 2)))))
+                            (if (and (< x-map (get-width d)) (< y-map (get-height d))
+                                     (> x-map 0) (> y-map 0))
+                                (let ((char (array-ref (get-grid d) x-map y-map))
+                                      (fov? (array-ref (get-fov p) x-map y-map))
+                                      (explored? (array-ref (get-explored d) x-map y-map)))
+                                  (cond ((and (= (get-x p) x-map) (= (get-y p) y-map)) ;drawing the player
+                                         (begin
+                                           (wattron (map-win t) A_BOLD)
+                                           (mvwaddch (map-win t) y-screen x-screen #\@)
+                                           (wattroff (map-win t) A_BOLD)))
+                                        (fov? ;drawing the field of vision
+                                         (begin
+                                           (wattron (map-win t) A_BOLD)
+                                           (if (= char WALL-CHAR)
+                                               (wattron (map-win t) (COLOR_PAIR 1))
+                                               (wattron (map-win t) (COLOR_PAIR 2)))
+                                           (mvwaddch (map-win t) y-screen x-screen char)
+                                           (wattroff (map-win t) A_BOLD)
+                                           (wattroff (map-win t) (COLOR_PAIR 1))
+                                           (wattroff (map-win t) (COLOR_PAIR 2))))
+                                        (#t ;explored? ;drawing the explored dungeon
+                                         (begin
+                                           (if (= char WALL-CHAR)
+                                               (wattron (map-win t) (COLOR_PAIR 1))
+                                               (wattron (map-win t) (COLOR_PAIR 3)))
+                                           (mvwaddch (map-win t) y-screen x-screen char)
+                                           (wattroff (map-win t) (COLOR_PAIR 1))
+                                           (wattroff (map-win t) (COLOR_PAIR 3))))
+                                        (else '())) ;else it draws nothing
+                                ))))))
           (wrefresh (map-win t)))
         
 

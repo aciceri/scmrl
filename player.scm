@@ -17,7 +17,7 @@
            (x reader: get-x writer: set-x)
            (y reader: get-y writer: set-y)
            (fov reader: get-fov writer: set-fov)
-           (explored reader: get-explored writer: set-explored)))
+           ))
 
         (define (make-player)
           (let ((p (make <player>)))
@@ -39,7 +39,8 @@
           (set-fov p (fov d (get-x p) (get-y p) 4))) ;4 is the fov radius
 
         (define-method (update-explored (p <player>) (d <dungeon>))
-          '()
+
+         '() 
           )
 
 

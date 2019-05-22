@@ -9,4 +9,4 @@
              (extension fov (source "fov.scm"))
              (extension utils (source "utils.scm"))
              (extension engine (source "engine.scm") (component-dependencies terminal player dungeon))
-             (extension terminal (component-dependencies dungeon player) (link-options -L -lncurses) (source "terminal.scm"))))
+             (extension terminal (component-dependencies dungeon player utils) (link-options -L -lncurses) (source "terminal.scm"))))

@@ -19,7 +19,7 @@
         (define-method (start (e <engine>))
           (let ((terminal (make-terminal))
                 (player (make-player))
-                (dungeon (make-dungeon 100 70 14 0 0)))
+                (dungeon (make-dungeon 80 40 20 0 0)))
             (loop terminal player dungeon)
             ))
 

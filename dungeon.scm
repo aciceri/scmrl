@@ -1,10 +1,13 @@
 (module dungeon
         (<dungeon>
          make-dungeon
+         FLOOR-CHAR
+         WALL-CHAR
          get-width
          get-height
          get-grid
-         fov)
+         fov
+         get-explored)
 
         (import scheme
                 srfi-1
@@ -23,7 +26,8 @@
            (grid-width initform: 0 reader: get-width writer: set-width)
            (grid-height initform: 0 reader: get-height writer: set-height)
            (rooms initform: '() reader: get-rooms writer: set-rooms)
-           (n-rooms initform: 0 reader: get-n-rooms writer: set-n-rooms)))
+           (n-rooms initform: 0 reader: get-n-rooms writer: set-n-rooms)
+           (explored reader: get-explored writer: set-explored)))
 
         (define (make-dungeon width height n-rooms n-cuts prob)
           (let ((d (make <dungeon>)))
@@ -32,6 +36,7 @@
              (set-width d width)
              (set-height d height)
              (set-n-rooms d n-rooms)
+             (set-explored d (make-array (shape 0 width 0 height) #f))
              (place-random-rooms d) ;place some random rooms
              (gen-maze d) ;generate a maze in the space between the rooms
              (connect-rooms d) ;create a single passage for every room
@@ -230,6 +235,11 @@
                               (array-set! m x y FLOOR-CHAR)))))))
 
         (define-method (fov (d <dungeon>) (x <integer>) (y <integer>) (radius <integer>))
-          (calculate-fov (get-grid d) (get-width d) (get-height d) x y radius))
+          (let ((vision (calculate-fov (get-grid d) (get-width d) (get-height d) x y radius)))
+            (map-matrix 0 0 (get-width d) (get-height d)
+                        (lambda (x y)
+                          (if (array-ref vision x y) (array-set! (get-explored d) x y #t))
+                          ))
+            vision))
 
         )
